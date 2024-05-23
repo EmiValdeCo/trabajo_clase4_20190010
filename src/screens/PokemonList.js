@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Dimensions, TextInput, ActivityIndicator } from 'react-native';
 
-
-
 const WIDTH = Dimensions.get('window').width;
-const numColumns = 3;
+const numColumns = 2;
 
 import PokemonItem from '../components/PokemonItem';
 import FormularioPokemon from '../components/FormularioPokemon';
@@ -31,6 +29,12 @@ export default function PokemonList() {
     fetchData();
   }, [cantidadPokemon]);
 
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <PokemonItem item={item} />
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <FormularioPokemon
@@ -45,10 +49,11 @@ export default function PokemonList() {
       ) : (
         <FlatList
           data={pokemon}
-          renderItem={({ item }) => <PokemonItem item={item} />}
+          renderItem={renderItem}
           keyExtractor={(item) => item.name}
           numColumns={numColumns}
           contentContainerStyle={styles.list}
+          style={styles.flatList}
         />
       )}
     </View>
@@ -59,24 +64,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 50,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center'
   },
   list: {
+    flexGrow: 1,
     justifyContent: 'center',
+  },
+  flatList: {
+    flex: 1,
   },
   card: {
     backgroundColor: '#f8f8f8',
     borderRadius: 8,
     margin: 5,
-    width: WIDTH / numColumns - 10,
+    width: WIDTH / numColumns - 10, // Adjust width based on number of columns
     alignItems: 'center',
     padding: 10,
     shadowColor: '#000',
